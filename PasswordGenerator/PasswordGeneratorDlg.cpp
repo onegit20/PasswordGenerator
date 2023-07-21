@@ -64,7 +64,7 @@ BOOL CPasswordGeneratorDlg::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 	SetWindowText(_T("密码生成器 V0.1"));
 	GetDlgItem(IDC_BUTTON1)->SetWindowText(_T("生成密码"));
-	GetDlgItem(IDC_BUTTON2)->SetWindowText(_T("复制密码"));
+	GetDlgItem(IDC_BUTTON2)->SetWindowText(_T("复制"));
 	m_chk1.SetWindowText(_T("A-Z"));
 	m_chk2.SetWindowText(_T("a-z"));
 	m_chk3.SetWindowText(_T("0-9"));
