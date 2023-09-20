@@ -7,6 +7,7 @@
 #include "PasswordGenerator.h"
 #include "PasswordGeneratorDlg.h"
 #include "afxdialogex.h"
+#include <algorithm>
 
 
 
@@ -62,24 +63,24 @@ BOOL CPasswordGeneratorDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	SetWindowText(_T("密码生成器 V0.1"));
+	SetWindowText(_T("密码生成器 v0.2"));
 	GetDlgItem(IDC_BUTTON1)->SetWindowText(_T("生成密码"));
 	GetDlgItem(IDC_BUTTON2)->SetWindowText(_T("复制"));
 	m_chk1.SetWindowText(_T("A-Z"));
 	m_chk2.SetWindowText(_T("a-z"));
 	m_chk3.SetWindowText(_T("0-9"));
-	m_chk4.SetWindowText(_T("!@#$%&&*."));  // &&显示&
+	m_chk4.SetWindowText(_T("][!\"#$%&&'()*+,./:;<=>?@\\^_`{|}~-"));  // &&显示&
 	m_chk1.SetCheck(TRUE);
 	m_chk2.SetCheck(TRUE);
 	m_chk3.SetCheck(TRUE);
 	m_chk4.SetCheck(TRUE);
-
 	m_edit1.SetReadOnly(TRUE);
 	m_edit2.SetReadOnly(TRUE);
 	m_sld1.SetFocus();
-	m_sld1.SetRange(6, 30);
+	m_sld1.SetRange(6, 40);
 	m_sld1.SetPos(16);
 	m_edit1.SetWindowText((CString)(GenerateStrongPassword().c_str()));
+	CDialog::SetDefID(IDC_EDIT1);  //设置默认ID，避免Enter退出，ESC还是会退出
 
 	//return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 	return FALSE;
@@ -127,13 +128,21 @@ string CPasswordGeneratorDlg::GenerateStrongPassword(INT length, BOOL chk_ALPHA,
 	string ALPHA = chk_ALPHA?"ABCDEFGHIJKLMNOPQRSTUVWXYZ":"";
 	string alpha = chk_alpha?"abcdefghijklmnopqrstuvwxyz":"";
 	string number = chk_number?"0123456789":"";
-	string symbol = chk_symbol?"!@#$%&*.":"";
+	string symbol = chk_symbol?"][!\"#$%&'()*+,./:;<=>?@\\^_`{|}~-":"";
 	string total = ALPHA+alpha+number+symbol;
 	string password = "";
 
+	/* 随机函数生成密码 */
+	/*
 	srand(time(0));
 	while(length--)
 		password += total[rand() % total.length()];
+	*/
+
+	/* 更新密码生成算法，利用随机洗牌函数 */
+	random_shuffle(total.begin(), total.end());  //随机洗牌total字符串
+	password = total.substr(0, length);
+
 	return password;
 }
 
@@ -171,7 +180,7 @@ void  CPasswordGeneratorDlg::CopyToClipboard()
 }
 
 
-void  CPasswordGeneratorDlg::Check_chk1(CButton &m_chk1, CButton &m_chk2, CButton &m_chk3, CButton &m_chk4)
+void  CPasswordGeneratorDlg::Check_chk(CButton &m_chk1, CButton &m_chk2, CButton &m_chk3, CButton &m_chk4)
 {
 	if (!m_chk1.GetCheck() && !m_chk2.GetCheck() && !m_chk3.GetCheck() && m_chk4.GetCheck())
 		m_chk4.EnableWindow(FALSE);
@@ -225,23 +234,23 @@ void CPasswordGeneratorDlg::OnNMCustomdrawSlider1(NMHDR* pNMHDR, LRESULT* pResul
 
 void CPasswordGeneratorDlg::OnBnClickedCheck1()
 {
-	Check_chk1(m_chk1,m_chk2,m_chk3,m_chk4);
+	Check_chk(m_chk1,m_chk2,m_chk3,m_chk4);
 }
 
 
 void CPasswordGeneratorDlg::OnBnClickedCheck2()
 {
-	Check_chk1(m_chk2, m_chk1, m_chk3, m_chk4);
+	Check_chk(m_chk2, m_chk1, m_chk3, m_chk4);
 }
 
 
 void CPasswordGeneratorDlg::OnBnClickedCheck3()
 {
-	Check_chk1(m_chk3, m_chk1, m_chk2, m_chk4);
+	Check_chk(m_chk3, m_chk1, m_chk2, m_chk4);
 }
 
 
 void CPasswordGeneratorDlg::OnBnClickedCheck4()
 {
-	Check_chk1(m_chk4, m_chk1, m_chk2, m_chk3);
+	Check_chk(m_chk4, m_chk1, m_chk2, m_chk3);
 }

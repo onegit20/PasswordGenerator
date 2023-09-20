@@ -37,7 +37,7 @@ public:
 	string CPasswordGeneratorDlg::GenerateStrongPassword(INT length=16,
 														BOOL chk_ALPHA=1, BOOL chk_alpha=1, BOOL chk_number=1, BOOL chk_symbol=1);
 	void CopyToClipboard();
-	void Check_chk1(CButton &m_chk1, CButton &m_chk2, CButton &m_chk3, CButton &m_chk4);
+	void Check_chk(CButton &m_chk1, CButton &m_chk2, CButton &m_chk3, CButton &m_chk4);
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton2();
 	CEdit m_edit1;
