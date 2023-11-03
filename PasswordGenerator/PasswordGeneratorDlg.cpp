@@ -63,7 +63,7 @@ BOOL CPasswordGeneratorDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	SetWindowText(_T("密码生成器 v0.2"));
+	SetWindowText(_T("密码生成器 v0.2-02"));
 	GetDlgItem(IDC_BUTTON1)->SetWindowText(_T("生成密码"));
 	GetDlgItem(IDC_BUTTON2)->SetWindowText(_T("复制"));
 	m_chk1.SetWindowText(_T("A-Z"));
@@ -132,16 +132,12 @@ string CPasswordGeneratorDlg::GenerateStrongPassword(INT length, BOOL chk_ALPHA,
 	string total = ALPHA+alpha+number+symbol;
 	string password = "";
 
+	random_shuffle(total.begin(), total.end());  //随机洗牌total字符串
+
 	/* 随机函数生成密码 */
-	/*
 	srand(time(0));
 	while(length--)
 		password += total[rand() % total.length()];
-	*/
-
-	/* 更新密码生成算法，利用随机洗牌函数 */
-	random_shuffle(total.begin(), total.end());  //随机洗牌total字符串
-	password = total.substr(0, length);
 
 	return password;
 }
